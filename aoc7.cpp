@@ -10,7 +10,25 @@ void dbg_out(){cerr << endl;}
     #define dbg(...) cerr << "(" << #__VA_ARGS__ << "):", dbg_out(__VA_ARGS__)
 //----------------------------------------------------------------------------------------------------------------//
  
- 
+
+
+
+
+
+int fun(int row, int col, vector<string> &grid,vector<vector<int>> &dp){
+    if(row==grid.size()-1) return 1;
+
+    if(dp[row][col]!=-1) return dp[row][col];
+    int ans=0;
+    if (grid[row+1][col]=='^'){
+        ans+=  (col+1<grid[0].size())?fun(row+1,col+1,grid,dp):0;
+        ans+=  (col-1>=0)?fun(row+1,col-1,grid,dp):0;
+    }
+    else ans+=fun(row+1,col,grid,dp);
+
+    return dp[row][col]=ans;
+}
+
  
 void solve()
 {
@@ -40,12 +58,6 @@ void solve()
     // }
     // cout<<ans<<endl;
 
-
-
-
-
-
-
     string line;
     vector<string> grid;
     while(getline(cin,line)){
@@ -54,8 +66,15 @@ void solve()
     }
     int rows=grid.size();
     int cols=grid[0].size();
- 
+    int Sposn=find(begin(grid[0]),  end(grid[0]),  'S')-begin(grid[0]);
+    grid[0][Sposn]='|';
+    vector<vector<int>> dp(rows,vector<int>(cols,-1));
+    cout<<fun(0,Sposn,grid,dp)<<endl;
+
 }
+
+
+
  
  
  
